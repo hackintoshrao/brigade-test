@@ -1,0 +1,11 @@
+project: "hackintoshrao/brigade-test"
+repository: "github.com/hackintoshrao/brigade-test"
+cloneURL: "https://github.com/hackintoshrao/brigade-test.git"
+# Used by GitHub to compute hooks.
+# MAKE SURE YOU CHANGE THIS. It's basically a password.
+sharedSecret: "my-secret"
+# Use this to have Brigade update your project about the build.
+# You probably want this if you want pull requests or commits to show
+# the build status.
+github:
+  token: "13d7639737a4ae9a883b18148a10e1d274800e66"

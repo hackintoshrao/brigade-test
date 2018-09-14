@@ -8,6 +8,7 @@ import app
 def bytes_to_str(b):
     return ''.join(x for x in (b))
     
+
 class AppTestCase(unittest.TestCase):
 
     def setUp(self):

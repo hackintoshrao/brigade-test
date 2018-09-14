@@ -6,7 +6,7 @@ import app
 # Helper
 
 def bytes_to_str(b):
-    return ''.join(str(x) for x in (b))
+    return ''.join((x) for x in (b))
     
 class AppTestCase(unittest.TestCase):
 

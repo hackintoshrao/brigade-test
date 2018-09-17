@@ -2,6 +2,8 @@ const { events, Job } = require("brigadier");
 
 events.on("pull_request", function(e, project) {
   console.log("received push for commit " + e.commit);
+  console.log("e=",e);
+  console.log("project=",project);
 
   // Create a new job
   var node = new Job("test-runner");

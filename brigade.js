@@ -27,9 +27,7 @@ events.on("pull_request", function(e, project) {
     })
     .catch(err => {
       const title = "Tests failed for Test app";
-      const msg = "Figure out how to display logs";
-      console.log(msg);
-      console.log(project.github.token);
+      const msg = "Figure out how to display logs";      
       ghNotify("failure", `failed: ${err.toString()}`, e, project).run();
       slack = slackNotify("danger", title, msg, e);
       slack.run();

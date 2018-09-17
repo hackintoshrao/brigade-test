@@ -28,7 +28,7 @@ events.on("pull_request", function(e, project) {
       const msg = "Figure out how to display logs";
       slack = slackNotify("danger", title, msg, e);
       slack.run();
-      ghNotify("faliure", `failed: ${err.toString()}`, e).run();
+      ghNotify("failure", `failed: ${err.toString()}`, e).run();
     });
 });
 

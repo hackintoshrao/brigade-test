@@ -18,13 +18,32 @@ events.on("pull_request", function(e, project) {
   ];
 
   // We're done configuring, so we run the job
-  node.run().catch(err => {
-    const title = "Tests failed for Test app";
-    const msg = "Figure out how to display logs";
-    slack = slackNotify("danger", title, msg, e);
-    slack.run();
-  });
+  node
+    .run()
+    .then(() => {
+      ghNotify("success", "Passed", e).run();
+    })
+    .catch(err => {
+      const title = "Tests failed for Test app";
+      const msg = "Figure out how to display logs";
+      slack = slackNotify("danger", title, msg, e);
+      slack.run();
+      ghNotify("success", "Passed", e).run();
+    });
 });
+
+function ghNotify(state, msg, e) {
+  const gh = new Job(`notify-${state}`, "technosophos/github-notify:latest");
+  gh.env = {
+    GH_REPO: "brigade test",
+    GH_STATE: state,
+    GH_DESCRIPTION: msg,
+    GH_CONTEXT: "brigade",
+    GH_TOKEN: "13d7639737a4ae9a883b18148a10e1d274800e66",
+    GH_COMMIT: e.revision.commit
+  };
+  return gh;
+}
 
 var count = 0;
 

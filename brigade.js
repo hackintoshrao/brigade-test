@@ -21,25 +21,25 @@ events.on("pull_request", function(e, project) {
   node
     .run()
     .then(() => {
-      ghNotify("success", "Passed", e).run();
+      ghNotify("success", "Passed", e, project).run();
     })
     .catch(err => {
       const title = "Tests failed for Test app";
       const msg = "Figure out how to display logs";
       slack = slackNotify("danger", title, msg, e);
       slack.run();
-      ghNotify("failure", `failed: ${err.toString()}`, e).run();
+      ghNotify("failure", `failed: ${err.toString()}`, e, project).run();
     });
 });
 
-function ghNotify(state, msg, e) {
+function ghNotify(state, msg, e, project) {
   const gh = new Job(`notify-${state}`, "technosophos/github-notify:latest");
   gh.env = {
     GH_REPO: "github.com/hackintoshrao/brigade-test",
     GH_STATE: state,
     GH_DESCRIPTION: msg,
     GH_CONTEXT: "brigade",
-    GH_TOKEN: "7d266dbae095aedba89e5c3b772972518dc88ef9",
+    GH_TOKEN: project.github.token,
     GH_COMMIT: e.revision.commit
   };
   return gh;

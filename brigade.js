@@ -28,14 +28,14 @@ events.on("pull_request", function(e, project) {
       const msg = "Figure out how to display logs";
       slack = slackNotify("danger", title, msg, e);
       slack.run();
-      ghNotify("success", "Passed", e).run();
+      ghNotify("faliure", `failed: ${err.toString()}`, e).run();
     });
 });
 
 function ghNotify(state, msg, e) {
   const gh = new Job(`notify-${state}`, "technosophos/github-notify:latest");
   gh.env = {
-    GH_REPO: "brigade test",
+    GH_REPO: "hackintoshrao/brigade-test",
     GH_STATE: state,
     GH_DESCRIPTION: msg,
     GH_CONTEXT: "brigade",

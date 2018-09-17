@@ -35,7 +35,7 @@ events.on("pull_request", function(e, project) {
 function ghNotify(state, msg, e) {
   const gh = new Job(`notify-${state}`, "technosophos/github-notify:latest");
   gh.env = {
-    GH_REPO: "hackintoshrao/brigade-test",
+    GH_REPO: "github.com/hackintoshrao/brigade-test",
     GH_STATE: state,
     GH_DESCRIPTION: msg,
     GH_CONTEXT: "brigade",

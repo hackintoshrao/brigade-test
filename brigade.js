@@ -1,7 +1,7 @@
 const { events, Job } = require("brigadier");
 
 events.on("pull_request", function(e, project) {
-  console.log("received push for commit " + e.commit);
+  console.log("received push for commit " + e.revision.commit);
   console.log("e=",e);
   console.log("project=",project);
 
@@ -43,7 +43,7 @@ function ghNotify(state, msg, e, project) {
     GH_STATE: state,
     GH_DESCRIPTION: msg,
     GH_CONTEXT: "brigade",
-    GH_TOKEN: project.github.token,
+    GH_TOKEN: project.repo.token,
     GH_COMMIT: e.revision.commit
   };
   return gh;

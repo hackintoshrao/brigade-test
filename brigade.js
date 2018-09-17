@@ -39,7 +39,7 @@ function ghNotify(state, msg, e) {
     GH_STATE: state,
     GH_DESCRIPTION: msg,
     GH_CONTEXT: "brigade",
-    GH_TOKEN: "13d7639737a4ae9a883b18148a10e1d274800e66",
+    GH_TOKEN: "7d266dbae095aedba89e5c3b772972518dc88ef9",
     GH_COMMIT: e.revision.commit
   };
   return gh;

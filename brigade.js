@@ -36,7 +36,7 @@ events.on("pull_request", function(e, project) {
 });
 
 function dockerBuild() {
-  const img = "spinnakernetflix/Flask"
+  const img = "spinnakernetflix/flask"
   const dind = new Job("dind", "docker:stable-dind");
   dind.privileged = true;
   dind.env = {

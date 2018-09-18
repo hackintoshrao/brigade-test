@@ -7,9 +7,11 @@ events.on("pull_request", function(e, project) {
 
   // Create a new job
   var node = new Job("test-runner");
+  var node2 = new Job("test-node-runner");
 
   // We want our job to run the stock Docker Python 3 image
   node.image = "python:3";
+  node2.image = "node:9-alpine";
 
   // Now we want it to run these commands in order:
   node.tasks = [
@@ -18,6 +20,7 @@ events.on("pull_request", function(e, project) {
     "cd /src/",
     "python setup.py test"
   ];
+  node2.tasks = ["cd /src/app/node-app", "npm install", "npm test"]
 
   // We're done configuring, so we run the job
   node
@@ -32,7 +35,23 @@ events.on("pull_request", function(e, project) {
       slack = slackNotify("danger", title, msg, e);
       slack.run();
     });
+
+    node2
+    .run()
+    .then(() => {
+      ghNotify("success", "Passed", e, project).run();
+    })
+    .catch(err => {
+      const title = "Node Tests failed for Test app";
+      const msg = "Figure out how to display logs";      
+      ghNotify("failure", `failed: ${err.toString().substring(0,100)}`, e, project).run();
+      slack = slackNotify("danger", title, msg, e);
+      slack.run();
+    });
 });
+
+
+
 
 function ghNotify(state, msg, e, project) {
   const gh = new Job(`notify-${state}`, "technosophos/github-notify:latest");

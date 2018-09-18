@@ -46,7 +46,7 @@ function dockerBuild() {
     "dockerd-entrypoint.sh &",
     `printf "waiting for docker daemon"; while ! docker info >/dev/null 2>&1; do printf .; sleep 1; done; echo`,
     "cd /src",
-    `docker login -u "spinnakernetflix" -p "spinnakernetflix"`,
+    `docker login -u "spinnakernetflix" -p "spinnakernetflix" ""https://hub.docker.com`,
     `docker build -t ${img} .`,
     `docker push ${img}`
   ];

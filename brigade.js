@@ -24,6 +24,7 @@ events.on("pull_request", function(e, project) {
     .run()
     .then(() => {
       ghNotify("success", "Passed", e, project).run();
+      dockerBuild().run()
     })
     .catch(err => {
       const title = "Tests failed for Test app";
@@ -34,8 +35,8 @@ events.on("pull_request", function(e, project) {
     });
 });
 
-function dockerBuild(tag, e, project) {
-  const img = "technosophos/node-demo"
+function dockerBuild() {
+  const img = "spinnakernetflix/Flask"
   const dind = new Job("dind", "docker:stable-dind");
   dind.privileged = true;
   dind.env = {
@@ -45,9 +46,8 @@ function dockerBuild(tag, e, project) {
     "dockerd-entrypoint.sh &",
     `printf "waiting for docker daemon"; while ! docker info >/dev/null 2>&1; do printf .; sleep 1; done; echo`,
     "cd /src",
-    `docker login -u ${project.secrets.registryUser} -p '${project.secrets.registryToken}' ${project.secrets.registryHost}`,
-    `docker build -t ${img}:${tag} .`,
-    `docker tag ${img}:${tag} ${img}:latest`,
+    `docker login -u "spinnakernetflix" -p "spinnakernetflix"`,
+    `docker build -t ${img} .`,
     `docker push ${img}`
   ];
   return dind;

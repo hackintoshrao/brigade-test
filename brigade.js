@@ -32,7 +32,7 @@ events.on("pull_request", function(e, project) {
       const title = "Tests failed for Test app";
       const msg = "Figure out how to display logs";      
       ghNotify("failure", `failed: ${err.toString().substring(0,100)}`, e, project).run();
-      slack = slackNotify("danger", title, msg, e);
+      slack = slackNotify("danger", title, `failed: ${err.toString().substring(0,300)}`, e);
       slack.run();
     });
 
@@ -43,9 +43,9 @@ events.on("pull_request", function(e, project) {
     })
     .catch(err => {
       const title = "Node Tests failed for Test app";
-      const msg = "Figure out how to display logs";      
+      //const msg = "Figure out how to display logs";      
       ghNotify("failure", `failed: ${err.toString().substring(0,100)}`, e, project).run();
-      slack = slackNotify("danger", title, msg, e);
+      slack = slackNotify("danger", title, `failed: ${err.toString().substring(0,300)}`, e);
       slack.run();
     });
 });
@@ -78,7 +78,7 @@ function slackNotify(state, title, msg, e) {
       "https://hooks.slack.com/services/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",
     SLACK_USERNAME: "Sandeep",
     SLACK_TITLE: "Build Failed",
-    SLACK_MESSAGE: "Build failed for this pull request",
+    SLACK_MESSAGE: msg,
     SLACK_COLOR: state
   };
   count++;

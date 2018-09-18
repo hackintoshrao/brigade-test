@@ -34,6 +34,26 @@ events.on("pull_request", function(e, project) {
     });
 });
 
+function dockerBuild(tag, e, project) {
+  const img = "technosophos/node-demo"
+  const dind = new Job("dind", "docker:stable-dind");
+  dind.privileged = true;
+  dind.env = {
+    DOCKER_DRIVER: "overlay"
+  }
+  dind.tasks = [
+    "dockerd-entrypoint.sh &",
+    `printf "waiting for docker daemon"; while ! docker info >/dev/null 2>&1; do printf .; sleep 1; done; echo`,
+    "cd /src",
+    `docker login -u ${project.secrets.registryUser} -p '${project.secrets.registryToken}' ${project.secrets.registryHost}`,
+    `docker build -t ${img}:${tag} .`,
+    `docker tag ${img}:${tag} ${img}:latest`,
+    `docker push ${img}`
+  ];
+  return dind;
+}
+
+
 function ghNotify(state, msg, e, project) {
   const gh = new Job(`notify-${state}`, "technosophos/github-notify:latest");
   gh.env = {

@@ -60,7 +60,8 @@ events.on("build-done", (e, project) => {
 
   deploy.tasks = [
     "cd /src",
-    "kubectl apply -f deployment.yaml" // Apply the newly created deploy.yml file
+    //"kubectl apply -f deployment.yaml" // Apply the newly created deploy.yml file
+    "kubectl config get-contexts"
   ]
 
   deploy.run().then( () => {

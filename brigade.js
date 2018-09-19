@@ -1,52 +1,52 @@
 const { events, Job } = require("brigadier");
 
 events.on("check_suite:requested", function(e, project){
-  console.log("++++++++++CHECKS_API++++++++++")
+  slackNotify("danger", "CHECKS_API", "CHECKS_API", e).run();
 });
 events.on("check_suite:rerequested", function(e, project){
-  console.log("++++++++++CHECKS_API++++++++++")
+  slackNotify("danger", "CHECKS_API", "CHECKS_API", e).run();
 });
 events.on("check_run:rerequested", function(e, project){
-  console.log("++++++++++CHECKS_API++++++++++")
+  slackNotify("danger", "CHECKS_API", "CHECKS_API", e).run();
 });
 
-events.on("pull_request", function(e, project) {
-  console.log("received push for commit " + e.revision.commit);
-  console.log("e=",e);
-  console.log("project=",project);
+// events.on("pull_request", function(e, project) {
+//   console.log("received push for commit " + e.revision.commit);
+//   console.log("e=",e);
+//   console.log("project=",project);
 
-  // Create a new job
-  var node = new Job("test-runner");
+//   // Create a new job
+//   var node = new Job("test-runner");
 
-  // We want our job to run the stock Docker Python 3 image
-  node.image = "python:3";
+//   // We want our job to run the stock Docker Python 3 image
+//   node.image = "python:3";
 
-  // Now we want it to run these commands in order:
-  node.tasks = [
-    "cd /src/app",
-    "pip install -r requirements.txt",
-    "cd /src/",
-    "python setup.py test"
-  ];
+//   // Now we want it to run these commands in order:
+//   node.tasks = [
+//     "cd /src/app",
+//     "pip install -r requirements.txt",
+//     "cd /src/",
+//     "python setup.py test"
+//   ];
 
-  // We're done configuring, so we run the job
-  node
-    .run()
-    .then(() => {
-      ghNotify("success", "Passed", e, project).run();
-      dockerBuild(project).run()
-      .then(()=>{
-        events.emit("build-done", e, project);
-      })
-    })
-    .catch(err => {
-      const title = "Tests failed for Test app";
-      const msg = "Figure out how to display logs";      
-      ghNotify("failure", `failed: ${err.toString().substring(0,100)}`, e, project).run();
-      slack = slackNotify("danger", title, msg, e);
-      slack.run();
-    });
-});
+//   // We're done configuring, so we run the job
+//   node
+//     .run()
+//     .then(() => {
+//       ghNotify("success", "Passed", e, project).run();
+//       dockerBuild(project).run()
+//       .then(()=>{
+//         events.emit("build-done", e, project);
+//       })
+//     })
+//     .catch(err => {
+//       const title = "Tests failed for Test app";
+//       const msg = "Figure out how to display logs";      
+//       ghNotify("failure", `failed: ${err.toString().substring(0,100)}`, e, project).run();
+//       slack = slackNotify("danger", title, msg, e);
+//       slack.run();
+//     });
+// });
 
 function dockerBuild(project) {
   const img = "spinnakernetflix/flask"
@@ -65,24 +65,24 @@ function dockerBuild(project) {
   ];
   return dind;
 }
-events.on("build-done", (e, project) => {
-  var deploy = new Job("deploy-runner", "tettaji/kubectl:1.10.3")
+// events.on("build-done", (e, project) => {
+//   var deploy = new Job("deploy-runner", "tettaji/kubectl:1.10.3")
 
-  deploy.tasks = [
-    "cd /src",
-    //"kubectl apply -f deployment.yaml" // Apply the newly created deploy.yml file
-    "kubectl config get-contexts"
-  ]
+//   deploy.tasks = [
+//     "cd /src",
+//     //"kubectl apply -f deployment.yaml" // Apply the newly created deploy.yml file
+//     "kubectl config get-contexts"
+//   ]
 
-  deploy.run().then( () => {
-    // We'll probably want to do something with a successful deployment later
-    slackNotify("success", "Deployment status", "Flask app successfully deployed", e).run();
+//   deploy.run().then( () => {
+//     // We'll probably want to do something with a successful deployment later
+//     slackNotify("success", "Deployment status", "Flask app successfully deployed", e).run();
 
-  })
-  .catch(() => {
-    slackNotify("Failed", "Deployment status", "Flask app deployment failed", e).run();
-  })
-})
+//   })
+//   .catch(() => {
+//     slackNotify("Failed", "Deployment status", "Flask app deployment failed", e).run();
+//   })
+// })
 
 
 function ghNotify(state, msg, e, project) {

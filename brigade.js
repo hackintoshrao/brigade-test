@@ -24,7 +24,7 @@ events.on("pull_request", function(e, project) {
     .run()
     .then(() => {
       ghNotify("success", "Passed", e, project).run();
-      dockerBuild().run()
+      dockerBuild(project).run()
     })
     .catch(err => {
       const title = "Tests failed for Test app";
@@ -35,7 +35,7 @@ events.on("pull_request", function(e, project) {
     });
 });
 
-function dockerBuild() {
+function dockerBuild(project) {
   const img = "spinnakernetflix/flask"
   const dind = new Job("dind", "docker:stable-dind");
   dind.privileged = true;
@@ -46,7 +46,7 @@ function dockerBuild() {
     "dockerd-entrypoint.sh &",
     `printf "waiting for docker daemon"; while ! docker info >/dev/null 2>&1; do printf .; sleep 1; done; echo`,
     "cd /src",
-    `docker login -u "spinnakernetflix" -p "spinnaker@netflix" `,
+    `docker login -u project.secretes.dockerLogin -p project.secretes.dockerPassword `,
     `docker build -t ${img} .`,
     `docker push ${img}`
   ];

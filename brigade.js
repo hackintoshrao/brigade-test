@@ -1,5 +1,15 @@
 const { events, Job } = require("brigadier");
 
+events.on("check_suite:requested", function checkRequested(e, project){
+  console.log("++++++++++CHECKS_API++++++++++")
+});
+events.on("check_suite:rerequested", function checkRequested(e, project){
+  console.log("++++++++++CHECKS_API++++++++++")
+});
+events.on("check_run:rerequested", function checkRequested(e, project){
+  console.log("++++++++++CHECKS_API++++++++++")
+});
+
 events.on("pull_request", function(e, project) {
   console.log("received push for commit " + e.revision.commit);
   console.log("e=",e);

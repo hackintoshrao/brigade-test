@@ -1,12 +1,12 @@
 const { events, Job } = require("brigadier");
 
-events.on("check_suite:requested", function checkRequested(e, project){
+events.on("check_suite:requested", function(e, project){
   console.log("++++++++++CHECKS_API++++++++++")
 });
-events.on("check_suite:rerequested", function checkRequested(e, project){
+events.on("check_suite:rerequested", function(e, project){
   console.log("++++++++++CHECKS_API++++++++++")
 });
-events.on("check_run:rerequested", function checkRequested(e, project){
+events.on("check_run:rerequested", function(e, project){
   console.log("++++++++++CHECKS_API++++++++++")
 });
 

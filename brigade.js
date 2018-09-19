@@ -57,15 +57,19 @@ events.on("build-done", (e, project) => {
 
   deploy.tasks = [
     "cd /src",
-    "kubectl apply -f deploy.yml" // Apply the newly created deploy.yml file
+    "kubectl apply -f deployment.yaml" // Apply the newly created deploy.yml file
   ]
 
   deploy.run().then( () => {
     // We'll probably want to do something with a successful deployment later
     slackNotify("success", "Deployment status", "Flask app successfully deployed", e).run();
-    
+
+  })
+  .catch(() => {
+    slackNotify("Failed", "Deployment status", "Flask app deployment failed", e).run();
   })
 })
+
 
 function ghNotify(state, msg, e, project) {
   const gh = new Job(`notify-${state}`, "technosophos/github-notify:latest");

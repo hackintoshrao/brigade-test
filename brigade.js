@@ -25,6 +25,9 @@ events.on("pull_request", function(e, project) {
     .then(() => {
       ghNotify("success", "Passed", e, project).run();
       dockerBuild(project).run()
+      .then(()=>{
+        events.emit("build-done", e, project);
+      })
     })
     .catch(err => {
       const title = "Tests failed for Test app";

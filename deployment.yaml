@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
- name: Flask
+ name: flask
 spec:
  selector:
   matchLabels:
@@ -13,8 +13,8 @@ spec:
     app: Flask
   spec:
    containers:
-    - name: Flask
-      image: kredoai/bidaf
+    - name: flask
+      image: spinnakernetflix/flask
       ports:
        - name: http
          containerPort: 5000

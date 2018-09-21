@@ -62,7 +62,8 @@ events.on("build-done", (e, project) => {
     "cd /src",
     //"kubectl apply -f deployment.yaml", // Apply the newly created deploy.yml file
     //"kubectl config get-contexts"
-    "kubectl get pods"
+    //"kubectl get pods"
+    "kubectl config view"
   ]
 
   deploy.run().then( () => {

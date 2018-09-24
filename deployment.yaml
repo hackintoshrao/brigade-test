@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: Flask
+spec:
+ selector:
+  matchLabels:
+   app: Flask
+ replicas: 2
+ template:
+  metadata:
+   labels:
+    app: Flask
+  spec:
+   containers:
+    - name: Flask
+      image: kredoai/bidaf
+      ports:
+       - name: http
+         containerPort: 5000

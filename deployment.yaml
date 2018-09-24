@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: flask
+spec:
+ selector:
+  matchLabels:
+   app: Flask
+ replicas: 2
+ template:
+  metadata:
+   labels:
+    app: Flask
+  spec:
+   containers:
+    - name: flask
+      image: spinnakernetflix/flask
+      ports:
+       - name: http
+         containerPort: 5000
